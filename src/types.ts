@@ -27,3 +27,11 @@ export type AlbumEntity = {
   id: number
   title: string
 }
+
+export type PhotoEntity = {
+  albumId: number
+  id: number
+  title: string
+  url: string
+  thumbnailUrl: string
+}

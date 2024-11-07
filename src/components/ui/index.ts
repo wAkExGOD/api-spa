@@ -1,2 +1,3 @@
 export * from "./Button"
-export * from "./AlbumItem"
+export * from "./Card"
+export * from "./Skeleton"

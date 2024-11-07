@@ -1,8 +1,7 @@
-import { getUser, getUserAlbums } from "@/api/queries"
-import { AlbumItem } from "@/components/ui"
-import { UserEntity } from "@/types"
+import { getUser } from "@/api/queries"
 import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
+import { Albums } from "./Albums"
 
 export const User = () => {
   const { id } = useParams()
@@ -18,11 +17,11 @@ export const User = () => {
   })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading user data...</div>
   }
 
   if (error) {
-    return <div>{error.message}</div>
+    return <p className="text-destructive">{error.message}</p>
   }
 
   if (!user) {
@@ -31,42 +30,30 @@ export const User = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <p>{user.name}</p>
+      <div className="flex flex-col gap-3 p-4 rounded-xl border bg-zinc-950">
+        <h1 className="font-bold text-2xl">{user.name}</h1>
+        <div className="flex flex-col gap-1 text-zinc-500">
+          <p>Username: {user.username}</p>
+          <p>
+            Email:{" "}
+            <a href={`mailto:${user.email}`} className="underline">
+              {user.email}
+            </a>
+          </p>
+          <p>Phone: {user.phone}</p>
+          <p>
+            Site:{" "}
+            <a
+              href={`https://${user.website}`}
+              target="_blank"
+              className="underline"
+            >
+              {user.website}
+            </a>
+          </p>
+        </div>
       </div>
       <Albums userId={user.id} />
-    </div>
-  )
-}
-
-const Albums = ({ userId }: { userId: UserEntity["id"] }) => {
-  const {
-    data: albums,
-    isLoading,
-    error,
-  } = useQuery({
-    enabled: Boolean(userId),
-    queryKey: ["users/albums", userId],
-    queryFn: () => getUserAlbums(userId as UserEntity["id"]),
-  })
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (error) {
-    return <div>{error.message}</div>
-  }
-
-  if (!albums) {
-    return <div>User #{userId} has no albums.</div>
-  }
-
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      {albums?.map((album) => (
-        <AlbumItem data={album} />
-      ))}
     </div>
   )
 }

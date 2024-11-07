@@ -1,4 +1,4 @@
-import { AlbumEntity, UserEntity } from "@/types"
+import { AlbumEntity, PhotoEntity, UserEntity } from "@/types"
 import { request } from "./request"
 
 export function getUsers() {
@@ -15,6 +15,10 @@ export function getAlbums() {
 
 export function getUserAlbums(userId: UserEntity["id"]) {
   return request<AlbumEntity[]>(`/users/${userId}/albums`)
+}
+
+export function getAlbumPhotos(albumId: AlbumEntity["id"]) {
+  return request<PhotoEntity[]>(`/albums/${albumId}/photos`)
 }
 
 export function getAlbum(id: AlbumEntity["id"]) {

@@ -1,6 +1,7 @@
 import { getAlbums } from "@/api/queries"
-import { AlbumItem } from "@/components/ui"
+import { AlbumItem } from "@/components/common"
 import { useQuery } from "@tanstack/react-query"
+import { AlbumSkeletons } from "./AlbumSkeletons"
 
 export const Albums = () => {
   const {
@@ -13,16 +14,20 @@ export const Albums = () => {
   })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <AlbumSkeletons />
   }
 
   if (error) {
-    return <div>{error.message}</div>
+    return <p className="text-destructive">{error.message}</p>
+  }
+
+  if (!albums) {
+    return <p className="text-destructive">Can't get albums</p>
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {albums?.map((album) => (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+      {albums.map((album) => (
         <AlbumItem key={album.id} data={album} />
       ))}
     </div>
